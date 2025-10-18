@@ -1,6 +1,3 @@
-# drag-and-drop-ts
-A simple drag-and-drop web application built with TypeScript. Demonstrates DOM manipulation, event handling, and clean project structure using modern TypeScript features.
-
 # 🖱️ Drag and Drop Project (TypeScript)
 
 A simple **Drag and Drop** application built using **TypeScript**, designed to demonstrate how to handle DOM events, manage drag-and-drop logic, and structure a small TypeScript project with compilation to JavaScript.
