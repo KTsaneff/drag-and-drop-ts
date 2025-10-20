@@ -1,3 +1,35 @@
+//validation
+interface Validatable {
+    value: string | number;
+    required?: boolean;
+    minLenght?: number;
+    maxLenght?: number;
+    min?: number;
+    max?: number;
+}
+
+function validate (validatableInput: Validatable) {
+    let isValid = true;
+
+    if(validatableInput.required) {
+        isValid = isValid && validatableInput.value.toString().trim().length !== 0;
+    }
+    if (validatableInput.minLenght != null && typeof validatableInput.value === 'string') {
+        isValid = isValid && validatableInput.value.trim().length >= validatableInput.minLenght;
+    }
+    if(validatableInput.maxLenght != null && typeof validatableInput.value === 'string') {
+        isValid = isValid && validatableInput.value.trim().length <= validatableInput.maxLenght;
+    }
+    if(validatableInput.min != null && typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value >= validatableInput.min;
+    }
+    if(validatableInput.max != null && typeof validatableInput.value === 'number') {
+        isValid = isValid && validatableInput.value <= validatableInput.max;
+    }
+
+    return isValid;
+}
+
 //autobind decorator
 function autobind(
     _: any, 
@@ -41,14 +73,33 @@ class ProjectInput {
     }
 
     private gatherUserInput(): [string, string, number] | void {
-        const enteredTitle = this.titleInputElement.value;
-        const enteredDescription = this.descriptionInputElement.value;
+        const enteredTitle = this.titleInputElement.value.trim();
+        const enteredDescription = this.descriptionInputElement.value.trim();
         const enteredPeople = this.peopleInputElement.value;
 
+        const titleValidatable: Validatable = {
+            value: enteredTitle,
+            required: true,
+            minLenght: 3,
+            maxLenght: 20
+        };
+
+        const descriptionValidatable: Validatable = {
+            value: enteredDescription,
+            maxLenght: 30
+        };
+
+        const peopleValidatable: Validatable = {
+            value: +enteredPeople,
+            required: true,
+            min: 1,
+            max: 5
+        }
+
         if (
-            validate({value: enteredTitle, required: true, minLenght: 5}) &&
-            validate({value: enteredDescription, required: true, minLenght: 5}) &&
-            validate({value: enteredPeople, required: true, minLenght: 5})
+            !validate(titleValidatable) ||
+            !validate(descriptionValidatable) ||
+            !validate(peopleValidatable)
         ) {
             alert('Invalid input, please try again!');
             return;
